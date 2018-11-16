@@ -1,74 +1,103 @@
 const uuid = require('uuid/v4')
-const { manageFile } = require('../../utils/index.js')
-const { read, write } = manageFile('../db/posts.json')
-
-//CREATE FUNCTION
-function create(body){
-  const error = []
-  const name = body.name
-
-  if(!name){
-    error.push('Please Provide Name')
-  }
-  if(typeof name !== "string"){
-    error.push('Completed should be a string')
-  }
-
-  if(error.length) return { error }
-
-  const post = {
-    id: uuid(),
-    name,
-    content
-  }
-
-  const posts = read()
-  
-  posts.push(post)
-  
-  write(posts)
-
-  return post
-}
+const {
+  manageFile
+} = require('../../utils/index.js')
+const {
+  read,
+  write
+} = manageFile('../db/posts.json')
 
 //GET ALL FUNCTION
 function getAll(id) {
   const posts = read()
+  const errors = []
+
+  if (!data.length) {
+    errors.push('No Current Posts')
+    return {
+      errors
+    }
+  }
   return id ? posts.slice(0, id) : posts
 }
 
 //GET ONE FUNCTION
 function getOne(id) {
   const posts = read()
-
+  const errors = []
   const post = posts.find(ele => ele.id === id)
 
   if (!post) {
+    errors.push('No Current Posts')
     return {
-      error: ['Post not found']
+      errors
     }
+
   }
+  return post
+}
+
+//CREATE FUNCTION
+function create(newPost) {
+  const error = []
+  const {
+    title,
+    content
+  } = newPost
+
+  if (title || content) {
+    error.push('Please Provide Title And Content')
+  }
+
+  // if(title.length > 30){
+  //   error.push('Title Should Be Less Than 30 Characters')
+  // }
+
+  // if(content.length > 300){
+  //   error.push('Post Should Less Than 300 Characters')
+  // }
+
+  // if (error.length) return {
+  //   error
+  // }
+
+  let post = {
+    id: uuid(),
+    title,
+    content
+  }
+  const posts = read()
+  posts.push(post)
+  write(posts)
   return post
 }
 
 //UPDATE FUNCTION
 function update(id, body) {
+  const error = []
+  const { title, content } = body
   const posts = read()
-  const name = body.name
-  const onePost = posts.find(ele => ele.id === id)
+  const post = posts.find(ele => ele.id === id)
 
-  if (!onePost) {
-    return {
-      error: ['Post not found. Could not update']
-    }
+  if (post < 0) {
+    error.push('Could Not Find Post To Edit')
   }
-  const post = {
-    id: uuid(),
-    name,
-    content
+
+  if (!title) {
+    error.push('Posts Require A Title')
   }
-  posts.splice(1, 0, post)
-  write(posts)
+
+  if (!content) {
+    error.push('Posts Require Content')
+  }
+
+  if (error.length < 1) {
+    post.title = title
+    post.content = content
+    write(posts)
+  } else {
+    post.error = error
+  }
   return post
 }
 
@@ -78,7 +107,7 @@ function remove(id) {
   const idx = posts.findIndex(ele => ele.id === id)
 
   if (idx === -1) return {
-    error: ['Post not found, could not delete']
+    error: ['Post Not Found, Could Not Delete']
   }
 
   const savedPost = posts[idx]

@@ -5,9 +5,9 @@ const bodyParser = require('body-parser')
 const morgan = require('morgan')
 const cors = require('cors')
 
-app.use(bodyParser.json())
-app.use(morgan('dev'))
-app.use(cors)
+app.use(express.json())
+if (process.env.NODE_ENV === 'development') app.use(morgan('dev'))
+app.use(cors())
 
 
 const postRoutes = require('../src/routes/posts.js')
@@ -21,11 +21,11 @@ app.use((err, req, res, next) => {
 })
 
 app.use((req, res, next) => {
-  res.status(404).json({ error: { message: 'Not found' }})
+  res.status(404).json({ error: { message: 'Not Found' }})
 })
 
 app.listen(port, function () {
-  console.log(`Howdy from port ${port}`)
+  console.log(`Howdy From Port ${port}`)
 })
 
 module.exports = app

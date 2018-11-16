@@ -3,23 +3,24 @@ const postModel = require('../models/post.js')
 
 //CREATE
 function create(req, res, next){
-  const newPost = postModel.create(req.body)
+  const data = postModel.create(req.body)
 
-  if(newPost.error) return next( { status: 400, message: newPost })
-  
-  res.status(201).send({ data: newPost })
+  if (data.errors) {
+    return next({ status: 400, message: `Create Post Failed`, errors: data.errors })
+  }
+  res.status(201).json(data)
 }
 
 //GET ALL 
-function getAll(req, res, next) {
-  const id = req.params.id
-  const data = postModel.getAll(id)
+function getAll(req, res, next){
+  const limit = req.query.limit
+  const data = postModel.getAll(limit)
   let result = []
   
   if (result.errors) {
     return next({
       status: 400,
-      message: `Could not find post`,
+      message: `Could Not Find Post`,
       errors: result.errors
     })
   }
@@ -30,41 +31,41 @@ function getAll(req, res, next) {
 
 //GET ONE
 function getOne(req, res, next) {
-  const post = postModel.getOne(req.params.id)
+  const data = postModel.getOne(req.params.id)
 
-  if(!post) return next({status: 404, message: post })
+  if(!data) return next({status: 404, message: data })
 
-  res.status(200).send(post)
+  res.status(200).send(data)
 }
 
 //UPDATE
 function update(req, res, next) {
-const id = req.params.id  
-const name = req.body.name
-const result = postModel.update(id, req.body)
+const id = req.params.id
+const body = req.body  
+const data = postModel.update(id, body)
 
-  if(result.errors) {
+  if(data.errors) {
     return next({
       status: 404,
-      message: `Could not update blog`,
-      errors: result.errors
+      message: `Could Not Update Blog`,
+      errors: data.errors
     })
   }
-  res.status(200).json({
-    data: result
-  })
+  res.status(201).json(
+    data
+  )
 }
 
 //DELETE
-
 function remove(req, res, next) {
-  const post = postModel.remove(req.params.id)
+  const id = req.params.id
+  const post = postModel.remove(id)
 
   if (!post) return next({
-    status: 404,
-    message: post
-  })
-  res.status(200).send(post)
+    status: 400,
+    message: 'Delete Failed' })
+  
+    res.status(200).send(post)
 }
 
 module.exports = {

@@ -4,10 +4,10 @@ const path = require('path')
 function manageFile(fileName){
   return {
     read: function(){
-      return JSON.parse(fs.readFileSync(path.join(__dirname, fileName), 'utf-8'))
+      return JSON.parse(fs.readFileSync(path.resolve(__dirname, fileName), 'utf-8'))
     },
-    write: function(data){
-      fs.writeFileSync(path.join(__dirname, fileName), JSON.stringify(data, null, 2), 'utf-8')
+    write: function(posts){
+      fs.writeFileSync(path.resolve(__dirname, fileName), JSON.stringify(posts, null, 2), 'utf-8')
     }
   }
 }
