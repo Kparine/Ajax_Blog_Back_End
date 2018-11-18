@@ -45,18 +45,16 @@ function create(newPost) {
     content
   } = newPost
 
-  if (title || content) {
+  if (!title || !content) {
     error.push('Please Provide Title And Content')
   }
 
   // if(title.length > 30){
   //   error.push('Title Should Be Less Than 30 Characters')
   // }
-
   // if(content.length > 300){
   //   error.push('Post Should Less Than 300 Characters')
   // }
-
   // if (error.length) return {
   //   error
   // }
