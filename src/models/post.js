@@ -12,7 +12,7 @@ function getAll(id) {
   const posts = read()
   const errors = []
 
-  if (!data.length) {
+  if (!post) {
     errors.push('No Current Posts')
     return {
       errors
