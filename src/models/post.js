@@ -10,14 +10,14 @@ const {
 //GET ALL FUNCTION
 function getAll(id) {
   const posts = read()
-  const errors = []
+  // const errors = []
 
-  if (!post) {
-    errors.push('No Current Posts')
-    return {
-      errors
-    }
-  }
+  // if (!post) {
+  //   errors.push('No Current Posts')
+  //   return {
+  //     errors
+  //   }
+  // }
   return id ? posts.slice(0, id) : posts
 }
 
