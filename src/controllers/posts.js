@@ -35,7 +35,7 @@ function getOne(req, res, next) {
 
   if(!data) return next({status: 404, message: data })
 
-  res.status(200).send(data)
+  res.status(200).send([ data ])
 }
 
 //UPDATE
