@@ -10,14 +10,6 @@ const {
 //GET ALL FUNCTION
 function getAll(id) {
   const posts = read()
-  // const errors = []
-
-  // if (!post) {
-  //   errors.push('No Current Posts')
-  //   return {
-  //     errors
-  //   }
-  // }
   return id ? posts.slice(0, id) : posts
 }
 
@@ -32,7 +24,6 @@ function getOne(id) {
     return {
       errors
     }
-
   }
   return post
 }
@@ -49,8 +40,8 @@ function create(newPost) {
   if (!title || !content) {
     errors.push('Please Provide Title And Content')
   }
-  if(title.length > 30){
-    errors.push('Title Should Be Less Than 30 Characters')
+  if(title.length > 60){
+    errors.push('Title Should Be Less Than 60 Characters')
   }
   if(content.length > 300){
     errors.push('Post Should Less Than 300 Characters')
@@ -83,12 +74,12 @@ function update(id, body) {
   if (!title || !content) {
     errors.push('Please Provide Title And Content')
   }
-  if(title.length > 30){
-    errors.push('Title Should Be Less Than 30 Characters')
-  }
-  if(content.length > 300){
-    errors.push('Post Should Less Than 300 Characters')
-  }
+  // if(title.length > 60){
+  //   errors.push('Title Should Be Less Than 60 Characters')
+  // }
+  // if(content.length > 300){
+  //   errors.push('Post Should Less Than 300 Characters')
+  // }
   if (errors.length) return {
     errors
   }
