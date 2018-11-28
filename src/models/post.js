@@ -40,16 +40,16 @@ function create(newPost) {
   if (!title || !content) {
     errors.push('Please Provide Title And Content')
   }
-  if(title.length > 60){
+  if (title.length > 60) {
     errors.push('Title Should Be Less Than 60 Characters')
   }
-  if(content.length > 300){
+  if (content.length > 300) {
     errors.push('Post Should Less Than 300 Characters')
   }
   if (errors.length) return {
     errors
   }
-  
+
   let post = {
     id: uuid(),
     title,
@@ -63,34 +63,45 @@ function create(newPost) {
 
 //UPDATE FUNCTION
 function update(id, body) {
-  const errors = []
-  const { title, content } = body
+  const {
+    title,
+    content
+  } = body
   const posts = read()
   const post = posts.find(ele => ele.id === id)
+  console.log(title);
+  console.log(content);
+
+
 
   if (post < 0) {
-    errors.push('Could Not Find Post To Edit')
+    return next({
+      status: 404,
+      message: 'Could Not Find Post To Edit'
+    })
   }
   if (!title || !content) {
-    errors.push('Please Provide Title And Content')
+    return next({
+      status: 400,
+      message: 'Please Provide Title And Content'
+    })
   }
-  // if(title.length > 60){
-  //   errors.push('Title Should Be Less Than 60 Characters')
-  // }
-  // if(content.length > 300){
-  //   errors.push('Post Should Less Than 300 Characters')
-  // }
-  if (errors.length) return {
-    errors
+  if (title.length > 60) {
+    return next({
+      status: 400,
+      message: 'Title Should Be Less Than 60 Characters'
+    })
   }
+  if (content.length > 500) {
+    return next({
+      status: 400,
+      message: 'Post Should Less Than 500 Characters'
+    })
+  }
+  post.title = title
+  post.content = content
+  write(posts)
 
-  if (errors.length < 1) {
-    post.title = title
-    post.content = content
-    write(posts)
-  } else {
-    post.errors = errors
-  }
   return post
 }
 
